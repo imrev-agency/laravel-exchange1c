@@ -68,16 +68,16 @@
         },
         {
             "name": "alex8bits/exchange1c",
-            "version": "2.1.2",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alex8bits/exchange1c.git",
-                "reference": "a3542cea43ac3a161656c862da18a8f1e01791c0"
+                "reference": "264ea0a64db0c62ebd31002dc51e83248ab17bd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alex8bits/exchange1c/zipball/a3542cea43ac3a161656c862da18a8f1e01791c0",
-                "reference": "a3542cea43ac3a161656c862da18a8f1e01791c0",
+                "url": "https://api.github.com/repos/alex8bits/exchange1c/zipball/264ea0a64db0c62ebd31002dc51e83248ab17bd1",
+                "reference": "264ea0a64db0c62ebd31002dc51e83248ab17bd1",
                 "shasum": ""
             },
             "require": {
@@ -129,9 +129,9 @@
                 "commerceml"
             ],
             "support": {
-                "source": "https://github.com/alex8bits/exchange1c/tree/2.1.2"
+                "source": "https://github.com/alex8bits/exchange1c/tree/v2.1.2"
             },
-            "time": "2026-04-06T10:14:55+00:00"
+            "time": "2026-04-06T10:26:54+00:00"
         },
         {
             "name": "brick/math",
