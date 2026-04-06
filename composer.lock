@@ -68,22 +68,23 @@
         },
         {
             "name": "alex8bits/exchange1c",
-            "version": "v2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alex8bits/exchange1c.git",
-                "reference": "eb4802079d91372179d9ed346e729d65e95f2639"
+                "reference": "a3542cea43ac3a161656c862da18a8f1e01791c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alex8bits/exchange1c/zipball/eb4802079d91372179d9ed346e729d65e95f2639",
-                "reference": "eb4802079d91372179d9ed346e729d65e95f2639",
+                "url": "https://api.github.com/repos/alex8bits/exchange1c/zipball/a3542cea43ac3a161656c862da18a8f1e01791c0",
+                "reference": "a3542cea43ac3a161656c862da18a8f1e01791c0",
                 "shasum": ""
             },
             "require": {
                 "alex8bits/commerceml": "^1.1.0",
                 "ext-simplexml": "*",
                 "ext-zip": "*",
+                "illuminate/contracts": "^10|^11|^12",
                 "php": ">=8.0"
             },
             "require-dev": {
@@ -93,6 +94,13 @@
                 "symfony/http-foundation": "^7.2"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bigperson\\Exchange1C\\Laravel\\Exchange1CServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Bigperson\\Exchange1C\\": "src/"
@@ -121,9 +129,9 @@
                 "commerceml"
             ],
             "support": {
-                "source": "https://github.com/alex8bits/exchange1c/tree/v2.1.1"
+                "source": "https://github.com/alex8bits/exchange1c/tree/2.1.2"
             },
-            "time": "2026-03-02T12:10:26+00:00"
+            "time": "2026-04-06T10:14:55+00:00"
         },
         {
             "name": "brick/math",
