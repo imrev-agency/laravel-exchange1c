@@ -6,36 +6,40 @@
 [![Codecov](https://img.shields.io/codecov/c/github/bigperson/laravel-exchange1c.svg?style=flat-square)](https://codecov.io/gh/bigperson/laravel-exchange1c)
 [![StyleCI](https://github.styleci.io/repos/154342667/shield?branch=master)](https://github.styleci.io/repos/154342667)
 
-Пакет признан облегчить интеграцию 1с предприятия и сайта на laravel. Пакет является по сути мостом между laravel и пакетом https://github.com/bigperson/exchange1c.
+> [!NOTE]
+> Цей репозиторій є форком оригінального проєкту [alex8bits/laravel-exchange1c](https://github.com/alex8bits/laravel-exchange1c).
 
-## Установка
-Установить зависимости
-```
-composer require alex8bits/laravel-exchange1c
+Пакет створений для полегшення інтеграції 1С:Підприємство та сайту на Laravel. По суті, він є містком між Laravel та пакетом [imrev-agency/exchange1c](https://github.com/imrev-agency/exchange1c) (оригінальний пакет: [bigperson/exchange1c](https://github.com/bigperson/exchange1c)).
+
+## Встановлення
+Встановити залежності:
+```bash
+composer require imrev-agency/laravel-exchange1c
 ```
  
-### Опубликовать конфиги
-```
+### Опублікувати конфіги
+```bash
 php artisan vendor:publish --provider="Bigperson\LaravelExchange1C\Exchange1CServiceProvider"
 ```
  
-## Использование
-Вам необходимо в конфиге указать, логин, пароль, свои модели и реализовать соответсвующие интерфейсы
+## Використання
+Вам необхідно вказати в конфігу логін, пароль, свої моделі та реалізувати відповідні інтерфейси:
 ```php
 \Bigperson\Exchange1C\Interfaces\GroupInterface::class   => \App\Models\Category::class,
 \Bigperson\Exchange1C\Interfaces\ProductInterface::class => \App\Models\Product::class,
 \Bigperson\Exchange1C\Interfaces\OfferInterface::class   => \App\Models\Offer::class,
 ```
-Подробнее о методах, которые необходимо реализовать можно прочитать в документации к модулю [carono/yii2-1c-exchange]((https://github.com/carono/yii2-1c-exchange#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B))
-Также необходимо [настроить 1С предприятие](https://github.com/carono/yii2-1c-exchange#%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-1%D0%A1) 
+Детальніше про методи, які потрібно реалізувати, можна прочитати в документації до модуля [carono/yii2-1c-exchange](https://github.com/carono/yii2-1c-exchange#%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B)
 
-### Подписка на события
-Вы можете подписаться на любое событие вызываемое внутри пакета [bigperson/exchange1c](https://github.com/bigperson/exchange1c/tree/master/src/Events) 
+Також необхідно [налаштувати 1С:Підприємство](https://github.com/carono/yii2-1c-exchange#%D0%9D%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-1%D0%A1).
+
+### Підписка на події
+Ви можете підписатися на будь-яку подію, що викликається всередині пакета [bigperson/exchange1c](https://github.com/bigperson/exchange1c/tree/master/src/Events):
 ```php
 'Bigperson\Exchange1C\Events\BeforeOffersSync' => [
     'App\Listeners\BeforeOffersSyncListener',
 ],
 ```
 
-# Лицензия
-Данный пакет является открытым кодом под лицензией [MIT license](LICENSE).
+# Ліцензія
+Цей пакет є відкритим кодом під ліцензією [MIT license](LICENSE).

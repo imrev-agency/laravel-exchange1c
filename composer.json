@@ -1,5 +1,5 @@
 {
-  "name": "alex8bits/laravel-exchange1c",
+  "name": "imrev-agency/laravel-exchange1c",
   "type": "library",
   "description": "Catalog Loader from 1c - CommerceML with laravel",
   "keywords": [
@@ -7,7 +7,7 @@
     "CommerceML",
     "Laravel"
   ],
-  "homepage": "https://github.com/alex8bits/laravel-exchange1c",
+  "homepage": "https://github.com/imrev-agency/laravel-exchange1c",
   "license": "MIT",
   "authors": [
     {
@@ -33,8 +33,18 @@
   "require": {
     "php": ">=8.1",
     "laravel/framework": "^8.0|^9.0|^10.0|^11.0",
-    "alex8bits/exchange1c": "2.1.3"
+    "imrev-agency/exchange1c": "^2.1.3 || dev-master"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/imrev-agency/exchange1c.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/imrev-agency/php-commerceml.git"
+    }
+  ],
   "require-dev": {
     "phpunit/phpunit": "^9.5 || ^10.0",
     "orchestra/testbench": "v9.0",
