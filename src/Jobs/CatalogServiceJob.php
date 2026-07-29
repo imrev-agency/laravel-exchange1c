@@ -9,10 +9,7 @@ declare(strict_types=1);
 
 namespace Bigperson\LaravelExchange1C\Jobs;
 
-use Bigperson\Exchange1C\Services\AuthService;
 use Bigperson\Exchange1C\Services\CatalogService;
-use Bigperson\Exchange1C\Services\CategoryService;
-use Bigperson\Exchange1C\Services\OfferService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,30 +51,16 @@ class CatalogServiceJob implements ShouldQueue
         $session = app()->make(Session::class);
         $request->setSession($session);
         $request->session()->replace($this->sessionData);
-        app()->instance('fakeRequest', $request);
-        app()
-            ->when(AuthService::class)
-            ->needs(Request::class)
-            ->give('fakeRequest');
-        app()
-            ->when(CatalogService::class)
-            ->needs(Request::class)
-            ->give('fakeRequest');
-        app()
-            ->when(CategoryService::class)
-            ->needs(Request::class)
-            ->give('fakeRequest');
-        app()
-            ->when(OfferService::class)
-            ->needs(Request::class)
-            ->give('fakeRequest');
-        app()
-            ->when(OfferService::class)
-            ->needs(Request::class)
-            ->give('fakeRequest');
+
         $service = app()->make(CatalogService::class);
         Log::debug('CatalogServiceJob handle', ['service' => $service, 'mode' => $mode]);
-        $service->$mode();
+
+        if ($mode === 'import') {
+            $service->import($request, (string) ($this->requestData['filename'] ?? ''));
+        } else {
+            $service->$mode($request);
+        }
+
         Log::debug('CatalogServiceJob done');
     }
 
