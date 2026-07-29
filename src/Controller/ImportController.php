@@ -12,7 +12,6 @@ namespace Bigperson\LaravelExchange1C\Controller;
 use Bigperson\Exchange1C\Exceptions\Exchange1CException;
 use Bigperson\Exchange1C\Services\CatalogService;
 use Bigperson\Exchange1C\Services\SaleService;
-use Bigperson\LaravelExchange1C\Jobs\CatalogServiceJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
@@ -96,20 +95,22 @@ class ImportController extends Controller
             return response($response, 200, ['Content-Type', 'text/plain']);
         }
 
-        if (!in_array($mode, ['import'], true)) {
+        if ($mode !== 'import') {
             throw new Exchange1CException('not correct request, class ExchangeCML not found');
         }
 
-        CatalogServiceJob::dispatch(
-            $request->all(),
-            $request->session()->all()
-        )
-            ->delay(now()->addSeconds(10))
-            ->onQueue(config('exchange1c.queue'));
+        // Synchronous, per protocol: 1C polls this exact request until it stops
+        // seeing "progress" (http://v8.1c.ru/edi/edi_stnd/90/92.htm). Our files are
+        // small (KB, not GB) and the endpoint is meant to be called by 1C, not a
+        // browser, so a blocking response here is correct — it used to be dispatched
+        // to a queued job that reported "success" immediately regardless of whether
+        // (or when) the job actually ran, which both lied to the caller and silently
+        // dropped the import if nothing was consuming the queue.
+        $service->import($request, (string) $request->get('filename'));
         $response = "success\n";
 
         $this->log(sprintf(
-            'New request, type: %s, mode: %s, response: %s. CatalogServiceJob is started',
+            'New request, type: %s, mode: %s, response: %s',
             $type,
             $mode,
             $response
@@ -123,10 +124,17 @@ class ImportController extends Controller
      */
     private function handleSale(Request $request, CatalogService $service, SaleService $saleService, string $mode, string $type)
     {
+        // type=sale is symmetric with type=catalog: checkauth/init/file are
+        // the same generic handshake+upload machinery (CatalogService isn't
+        // catalog-specific despite the name), query/success are the
+        // site->1C direction (new orders), file+import is 1C->site (status
+        // updates uploaded as a file, then processed).
         $response = match ($mode) {
-            'checkauth' => $service->checkauth($request),
+            'checkauth', 'init' => $service->$mode($request),
+            'file' => $service->file($request),
             'query' => $saleService->query($request, (int) $request->get('orderIDfrom', 0)),
             'success' => $saleService->success($request),
+            'import' => $this->importSaleUpdates($saleService, (string) $request->get('filename')),
             default => throw new Exchange1CException("Logic for type={$type}, mode={$mode} not released"),
         };
 
@@ -138,6 +146,13 @@ class ImportController extends Controller
         ));
 
         return response($response, 200, ['Content-Type', 'text/plain']);
+    }
+
+    private function importSaleUpdates(SaleService $saleService, string $filename): string
+    {
+        $saleService->importUpdates($filename);
+
+        return "success\n";
     }
 
     private function log(string $message, string $type = 'info'): void
