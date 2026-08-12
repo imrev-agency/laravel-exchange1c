@@ -72,8 +72,23 @@ class ImportController extends Controller
             $response .= $e->getFile()."\n";
             $response .= $e->getLine()."\n";
 
-            return response($response, 500, ['Content-Type', 'text/plain']);
+            return $this->respond($response, 500);
         }
+    }
+
+    /**
+     * 1C's exchange client (checkauth/init/CommerceML) still expects Windows-1251
+     * by default, so transcode the UTF-8 payload we build internally before
+     * sending it, and declare the matching charset in both the XML prolog and
+     * the Content-Type header — otherwise 1C misreads the bytes and shows
+     * mojibake for Cyrillic fields.
+     */
+    private function respond(string $response, int $status = 200)
+    {
+        $response = str_ireplace('utf-8', 'windows-1251', $response);
+        $response = iconv('UTF-8', 'Windows-1251//TRANSLIT//IGNORE', $response);
+
+        return response($response, $status, ['Content-Type' => 'text/plain; charset=windows-1251']);
     }
 
     /**
@@ -92,7 +107,7 @@ class ImportController extends Controller
                 $response
             ));
 
-            return response($response, 200, ['Content-Type', 'text/plain']);
+            return $this->respond($response);
         }
 
         if ($mode !== 'import') {
@@ -116,7 +131,7 @@ class ImportController extends Controller
             $response
         ));
 
-        return response($response, 200, ['Content-Type', 'text/plain']);
+        return $this->respond($response);
     }
 
     /**
@@ -145,7 +160,7 @@ class ImportController extends Controller
             strlen($response)
         ));
 
-        return response($response, 200, ['Content-Type', 'text/plain']);
+        return $this->respond($response);
     }
 
     private function importSaleUpdates(SaleService $saleService, string $filename): string
